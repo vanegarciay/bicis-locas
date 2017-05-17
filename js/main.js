@@ -6,36 +6,28 @@ function validateForm(){
     var constrasenia = document.getElementById("input-password").value;
     var bici = document.getElementById("tipos_bici").value;
 
+    validateCampo(nombre, "name-container", 'Debe ingresar su nombre', "");
+    validateCampo(apellido, "lastname-container", 'Debe ingresar su apellido', "");
+    validateCampo(correo, "email-container", 'Debe ingresar un correo electrónico', ""); 
+    validateCampo(constrasenia, "password-container", 'Debe ingresar una contraseña', ""); 
+    validateCampo(bici, "seleciona_bici", 'Debe seleccionar una bici', 0); 
+}
+
+function validateCampo(dato,clase,mensaje,dato_erroneo){
+    var padre = document.getElementsByClassName(clase)[0];
+    var span = document.getElementById(clase);
     
-    if (nombre==""){
-        var nombrePadre = document.getElementsByClassName("name-container input-box")[0];
-        var mensaje = document.createElement("span");
-        var nombre_vacio = document.createTextNode('Debe ingresar su nombre');
-        nombrePadre.appendChild(mensaje);
-        mensaje.appendChild(nombre_vacio);
-    } else if (apellido==""){
-        var apellidoPadre = document.getElementsByClassName("lastname-container input-box")[0];
-        var mensaje = document.createElement("span");
-        var apellido_vacio = document.createTextNode('Debe ingresar su apellido');
-        apellidoPadre.appendChild(mensaje);
-        mensaje.appendChild(apellido_vacio);        
-    } else if (correo==""){
-        var correoPadre = document.getElementsByClassName("email-container input-box")[0];
-        var mensaje = document.createElement("span");
-        var correo_vacio = document.createTextNode('Debe ingresar su correo');
-        correoPadre.appendChild(mensaje);
-        mensaje.appendChild(correo_vacio);        
-    } else if (constrasenia==""){
-        var constraseniaPadre = document.getElementsByClassName("form-group input-box")[0];
-        var mensaje = document.createElement("span");
-        var constrasenia_vacio = document.createTextNode('Debe ingresar una contraseña');
-        constraseniaPadre.appendChild(mensaje);
-        mensaje.appendChild(constrasenia_vacio);        
-    } else if (bici==0){
-        var biciPadre = document.getElementById("seleciona_bici");
-        var mensaje = document.createElement("span");
-        var bici_vacio = document.createTextNode('Debe Seleccionar una bici');
-        biciPadre.appendChild(mensaje);
-        mensaje.appendChild(bici_vacio);        
+    if(dato==dato_erroneo) {
+        if(span==null) {
+            var span_mensaje = document.createElement("span");
+            span_mensaje.setAttribute("id", clase);
+            var texto = document.createTextNode(mensaje);
+            padre.appendChild(span_mensaje);
+            span_mensaje.appendChild(texto);
+        }
+    } else {
+        if(span!=null) {
+            padre.removeChild(span);
+        }
     }
 }
