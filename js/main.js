@@ -6,104 +6,82 @@ function validateForm(){
     var constrasenia = document.getElementById("input-password").value;
     var bici = document.getElementById("tipos_bici").value;
 
-    validateCampo(nombre, "name-container", 'Debe ingresar un nombre (primera letra mayus)', "");
-    validateCampo(apellido, "lastname-container", 'Debe ingresar su apellido (primera letra mayus)', "");
-    validateCampo(correo, "email-container", 'Debe ingresar un correo electrónico válido', ""); 
-    validateCampo(constrasenia, "password-container", 'Debe ingresar una contraseña(debe ser mayor a 6, no puede ser "123456" ni "098754")', ""); 
-    validateCampo(bici, "tipo-bici-container", 'Debe seleccionar una bici', 0); 
-}
-
-function validateCampo(dato,clase,mensaje,dato_erroneo){
-    var padre = document.getElementsByClassName(clase)[0];
-    var span = document.getElementById(clase);
-    
-    if(dato==dato_erroneo) {
-        if(span==null) {
-            var span_mensaje = document.createElement("span");
-            span_mensaje.setAttribute("id", clase);
-            var texto = document.createTextNode(mensaje);
-            padre.appendChild(span_mensaje);
-            span_mensaje.appendChild(texto);
-        }
-    } else if (clase == "email-container" && !validateEmail(dato)) {
-        if(span==null) {
-            var span_mensaje = document.createElement("span");
-            span_mensaje.setAttribute("id", clase);
-            var texto = document.createTextNode(mensaje);
-            padre.appendChild(span_mensaje);
-            span_mensaje.appendChild(texto);
-        }
-    } else if (clase == "name-container" && !validateName(dato)) {
-        if(span==null) {
-            var span_mensaje = document.createElement("span");
-            span_mensaje.setAttribute("id", clase);
-            var texto = document.createTextNode(mensaje);
-            padre.appendChild(span_mensaje);
-            span_mensaje.appendChild(texto);
-        }
-    } else if (clase == "lastname-container" && !validateLastName(dato)) {
-        if(span==null) {
-            var span_mensaje = document.createElement("span");
-            span_mensaje.setAttribute("id", clase);
-            var texto = document.createTextNode(mensaje);
-            padre.appendChild(span_mensaje);
-            span_mensaje.appendChild(texto);
-        } 
-    } else if (clase == "password-container" && !validatePass(dato)) {
-        console.log("paso");
-        if(span==null) {
-            var span_mensaje = document.createElement("span");
-            span_mensaje.setAttribute("id", clase);
-            var texto = document.createTextNode(mensaje);
-            padre.appendChild(span_mensaje);
-            span_mensaje.appendChild(texto);
-        } 
-    } else {
-        if(span!=null) {
-            padre.removeChild(span);
-        }
-    }
+    validateName(nombre);
+    validateLastName(apellido);
+    validateEmail(correo);
+    validatePass(constrasenia);
+    validateBiciType(bici);
 }
 
 function validateEmail(correo) {
-    var respuesta = false;
     var regex = /^([a-z]+[a-z1-9._-]*)@{1}([a-z1-9\.]{2,})\.([a-z]{2,3})$/;
-    if (regex.test(correo)) {
-        respuesta = true;
+    if (regex.test(correo) && validateEmpty(correo)) {
+        cleanError("email-container");
+    } else {
+        showError("email-container", 'Debe ingresar un correo electrónico válido');
     }
-    return respuesta;
 }
 
 function validateName(nombre) {
-    var respuesta = false;
     var regex = /^[A-Z]{1}[a-z]*$/;
-    if (regex.test(nombre)) {
-        respuesta = true;
+    if (regex.test(nombre) && validateEmpty(nombre)) {
+        cleanError("name-container");
+    } else {
+        showError("name-container", 'Debe ingresar un nombre (primera letra mayus)');
     }
-    return respuesta;    
 }
 
 function validateLastName(apellido) {
-    var respuesta = false;
     var regex = /^[A-Z]{1}[a-z]*$/;
-    if (regex.test(apellido)) {
-        respuesta = true;
-    }
-    return respuesta;    
+    if (regex.test(apellido) && validateEmpty(apellido)) {
+        cleanError("lastname-container");
+    } else {
+        showError("lastname-container", 'Debe ingresar su apellido (primera letra mayus)');
+    }    
 }
 
 function validatePass(constrasenia) {
+    if(constrasenia.length >= 6 && constrasenia != "123456" && constrasenia != "098754" && validateEmpty(constrasenia)){
+        cleanError("password-container");
+    } else {
+        showError("password-container", 'Debe ingresar una contraseña segura');
+    }
+}
+
+function validateBiciType(tipo_bici) {
+    if(tipo_bici!= "0"){
+        cleanError("tipo-bici-container");
+    } else {
+        showError("tipo-bici-container", 'Debe seleccionar una bici');
+    }
+}
+
+function validateEmpty(dato){
     var respuesta = false;
-    console.log(constrasenia);
-    console.log(constrasenia.length);
-    if(constrasenia.length >= 6 && constrasenia != "123456" && constrasenia != "098754"){
-       respuesta = true;  
-    } 
-    console.log(respuesta);
+    if (dato != "") {
+        respuesta = true;
+    }
     return respuesta;
 }
- 
 
-// Nombre y apellido deben solo tener caracteres de la A a Z y deben empezar con la primera mayus
-//email debe tener el formato ghyhb@dfgh
-//password debe tener al menos 6 caracteres y no puede ser 123456 o 098754
+function showError(clase,mensaje){
+    var padre = document.getElementsByClassName(clase)[0];
+    var span = document.getElementById(clase);
+    
+    if(span==null) {
+        var span_mensaje = document.createElement("span");
+        span_mensaje.setAttribute("id", clase);
+        var texto = document.createTextNode(mensaje);
+        padre.appendChild(span_mensaje);
+        span_mensaje.appendChild(texto);
+    }
+}
+
+function cleanError(clase){
+    var padre = document.getElementsByClassName(clase)[0];
+    var span = document.getElementById(clase);
+    
+    if(span!=null) {
+        padre.removeChild(span);
+    }
+}
