@@ -9,7 +9,7 @@ function validateForm(){
     validateCampo(nombre, "name-container", 'Debe ingresar un nombre (primera letra mayus)', "");
     validateCampo(apellido, "lastname-container", 'Debe ingresar su apellido (primera letra mayus)', "");
     validateCampo(correo, "email-container", 'Debe ingresar un correo electrónico válido', ""); 
-    validateCampo(constrasenia, "password-container", 'Debe ingresar una contraseña', ""); 
+    validateCampo(constrasenia, "password-container", 'Debe ingresar una contraseña(debe ser mayor a 6, no puede ser "123456" ni "098754")', ""); 
     validateCampo(bici, "tipo-bici-container", 'Debe seleccionar una bici', 0); 
 }
 
@@ -42,7 +42,15 @@ function validateCampo(dato,clase,mensaje,dato_erroneo){
             span_mensaje.appendChild(texto);
         }
     } else if (clase == "lastname-container" && !validateLastName(dato)) {
-        console.log("entro");
+        if(span==null) {
+            var span_mensaje = document.createElement("span");
+            span_mensaje.setAttribute("id", clase);
+            var texto = document.createTextNode(mensaje);
+            padre.appendChild(span_mensaje);
+            span_mensaje.appendChild(texto);
+        } 
+    } else if (clase == "password-container" && !validatePass(dato)) {
+        console.log("paso");
         if(span==null) {
             var span_mensaje = document.createElement("span");
             span_mensaje.setAttribute("id", clase);
@@ -82,6 +90,17 @@ function validateLastName(apellido) {
         respuesta = true;
     }
     return respuesta;    
+}
+
+function validatePass(constrasenia) {
+    var respuesta = false;
+    console.log(constrasenia);
+    console.log(constrasenia.length);
+    if(constrasenia.length >= 6 && constrasenia != "123456" && constrasenia != "098754"){
+       respuesta = true;  
+    } 
+    console.log(respuesta);
+    return respuesta;
 }
  
 
